@@ -10,13 +10,45 @@ class _HomeState extends State<Home> {
 
 TextEditingController _controllerAlcool = TextEditingController();
 TextEditingController _controllerGasolina = TextEditingController();
+String _textoResultado = "";
+
+void _calcular(){
+
+  double precoAlcool = double.tryParse( _controllerAlcool.text);
+  double precoGasolina = double.tryParse( _controllerGasolina.text);
+  
+
+  if( precoAlcool == null || precoGasolina == null ){
+    setState(() {
+       _textoResultado = "Número inválido, digite números maiores que 0 utlizando (.)";
+    });
+  }else{
+   
+    if(precoAlcool / precoGasolina >= 0.7){
+      setState(() {
+        _textoResultado = "Melhor abastecer com gasolina";
+      });
+    }else{
+      setState(() {
+        _textoResultado = "Melhor abastecer com Alcool";
+      });
+    }
+      _limparCampos();
+  }
+
+} 
+
+void _limparCampos(){
+  _controllerGasolina.text ="";
+  _controllerAlcool.text = "";
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(
       title: Text("Álcool ou Gasolina"),
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Colors.deepPurple,
     ) ,
     body: Container(
       
@@ -79,12 +111,12 @@ TextEditingController _controllerGasolina = TextEditingController();
                    fontWeight: FontWeight.bold
                  ),
                  ),
-               onPressed: (){},
+               onPressed: _calcular,
              ),
            ),
            Padding(
              padding: EdgeInsets.only(top: 20),
-             child: Text("Resultado",
+             child: Text( _textoResultado,
              style: TextStyle(
                fontSize: 22,
                fontWeight: FontWeight.bold
